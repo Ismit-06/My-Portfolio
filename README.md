@@ -1,54 +1,44 @@
+🌐 My Portfolio
 
-## Hypefolio 🔥
+This is my personal portfolio website, built to showcase my projects, skills, and journey as a developer.
 
-Hypefolio is a feature-rich portfolio website designed to showcase your projects and skills in a captivating way. Built with a tech stack of HTML, CSS, and JavaScript, this responsive portfolio ensures a seamless experience across devices.
-## Demo
+🚀 Features
 
-https://harisahmad.netlify.app
+Clean and responsive design
+
+About me section
+
+Projects showcase with live links & GitHub repos
+
+Contact form / socials integration
+
+Smooth UI animations
+
+🛠️ Tech Stack
+
+Frontend: HTML, CSS, JavaScript (or React/Vue/Next.js if you used one)
+
+Styling: TailwindCSS / Bootstrap / Custom CSS
+
+Deployment: GitHub Pages / Vercel / Netlify
+
+📂 Setup & Installation
+
+Clone the repository and run locally:
+
+git clone https://github.com/Ismit-06/My Portfolio.git
+cd portfolio
+# If it's React/Next.js
+npm install
+npm run dev
 
 
-## Features
-
-- Easy to Setup 💯
-- Free to Use ( OpenSource ) 🥳
-- Multi Page 💎
-- Fully Responsive 🚀
-- Super Fast and Optimized for SEO ⚡
-- Dark/Light Toggle Modes 🤘
+If it’s plain HTML/CSS/JS, just open index.html in your browser.
 
 
+📬 Contact
 
+Email: ismittripathyit@gmail.com
 
-## 🚀 About Me
-Hello, I'm Haris Ahmad, the visionary mind behind Hypefolio – a groundbreaking open-source portfolio website. Dive into the world of coding excellence with Hypefolio's freely available source code, empowering anyone to craft their digital showcase effortlessly. 🌐✨
+LinkedIn: ismit06
 
-Connect with me on LinkedIn to stay in the loop with my professional journey and discover insights into the evolving tech landscape.
-
-My Linkedin: https://www.linkedin.com/in/harisahmad59
-
-Your journey doesn't stop there! Join me on Instagram for a closer look at my content, where I share coding tips, project highlights, and more. Don't miss out – your coding adventure awaits! 🔍💡 
-
-Instagram: https://www.instagram.com/codehype_/
-
-
-## Tech Stack
-
-- HTML 🚀
-- CSS 🚀
-- JavaScript 🚀
-## How To Use
-
-```
-# Clone this repository
-$ git clone https://github.com/harisahmad59/Hypefolio
-
-# Go into the repository
-$ cd Hypefolio
-
-# Remove current origin repository
-$ git remote remove origin
-```
-then open the index.html inside your favorite browser or using the live server extension. Use this source code to create your own hypefolio portfolio website.
-## Give a Star ⭐
-
-If you like this project then give it a Github star by pressing the Star button ⭐
