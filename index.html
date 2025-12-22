@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ismit Tripathy - Portfolio</title>
+    <!-- Swiper CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css"
+    />
+    <!-- FontAwesome -->
+    <script
+      src="https://kit.fontawesome.com/9b634c15bd.js"
+      crossorigin="anonymous"
+    ></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+      :root {
+        --hue-color: 250;
+        --first-color: hsl(var(--hue-color), 69%, 61%);
+        --first-color-alt: hsl(var(--hue-color), 57%, 53%);
+        --title-color: hsl(var(--hue-color), 8%, 15%);
+        --text-color: hsl(var(--hue-color), 8%, 45%);
+        --body-color: #fcfcfc;
+        --container-color: #fff;
+        --bg-gradient: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+        --transition-curve: cubic-bezier(0.645, 0.045, 0.355, 1);
+      }
+
+      /* Dark Theme Variables */
+      body.dark-theme {
+        --first-color: hsl(var(--hue-color), 70%, 70%); /* Lighter purple for dark mode */
+        --title-color: hsl(var(--hue-color), 8%, 95%);
+        --text-color: hsl(var(--hue-color), 8%, 75%);
+        --body-color: hsl(var(--hue-color), 28%, 12%);
+        --container-color: hsl(var(--hue-color), 29%, 16%);
+        --bg-gradient: linear-gradient(135deg, hsl(var(--hue-color), 28%, 12%) 0%, hsl(var(--hue-color), 25%, 10%) 100%);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background: var(--bg-gradient);
+        color: var(--text-color);
+        overflow: hidden; /* No native scroll */
+        height: 100vh;
+        width: 100vw;
+        transition: background 0.5s ease;
+      }
+
+      a { text-decoration: none; color: inherit; }
+      ul { list-style: none; }
+      img { max-width: 100%; display: block; }
+
+      /* --- Navigation --- */
+      .header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 100;
+        padding: 1.5rem 2rem;
+        transition: transform 0.4s ease, opacity 0.4s ease;
+        backdrop-filter: blur(10px);
+        background: rgba(255, 255, 255, 0.05); /* Very subtle glass */
+      }
+
+      body.dark-theme .header {
+        background: rgba(0, 0, 0, 0.1);
+      }
+
+      .nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .nav-logo {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--title-color);
+        letter-spacing: -1px;
+      }
+      
+      .nav-list {
+        display: flex;
+        gap: 2.5rem;
+      }
+
+      .nav-link {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--title-color);
+        position: relative;
+        transition: color 0.3s;
+        cursor: pointer;
+      }
+
+      .nav-link::after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: -4px;
+        left: 0;
+        background-color: var(--first-color);
+        transition: width 0.3s;
+      }
+
+      .nav-link:hover::after, .nav-link.active-link::after {
+        width: 100%;
+      }
+
+      .nav-link:hover, .nav-link.active-link {
+        color: var(--first-color);
+      }
+
+      /* Mobile Nav Toggle */
+      .nav-toggle { display: none; font-size: 1.5rem; color: var(--title-color); cursor: pointer; }
+      .nav-close { display: none; }
+
+      /* --- Slide Structure --- */
+      .main-wrapper {
+        position: relative;
+        height: 100vh;
+        width: 100%;
+      }
+
+      .section-slide {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.8s var(--transition-curve), visibility 0.8s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 10%;
+        z-index: 1;
+        overflow: hidden; /* Prevent spillover */
+      }
+
+      .section-slide.active {
+        opacity: 1;
+        visibility: visible;
+        z-index: 10;
+      }
+
+      /* --- Animations --- */
+      .animate-item {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+      }
+
+      .section-slide.active .animate-item {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      
+      /* Stagger delays */
+      .delay-100 { transition-delay: 0.1s; }
+      .delay-200 { transition-delay: 0.2s; }
+      .delay-300 { transition-delay: 0.3s; }
+      .delay-400 { transition-delay: 0.4s; }
+      .delay-500 { transition-delay: 0.5s; }
+
+      /* --- Side Indicator --- */
+      .side-nav {
+        position: fixed;
+        right: 2rem;
+        top: 50%;
+        transform: translateY(-50%);
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        z-index: 100;
+      }
+
+      .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: var(--text-color);
+        opacity: 0.3;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+
+      .dot.active {
+        opacity: 1;
+        background-color: var(--first-color);
+        transform: scale(1.3);
+      }
+
+      /* --- Home Section --- */
+      .home-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        align-items: center;
+        gap: 4rem;
+        max-width: 1200px;
+        width: 100%;
+      }
+
+      .home-text h1 {
+        font-size: 3.5rem;
+        font-weight: 700;
+        color: var(--title-color);
+        line-height: 1.1;
+        margin-bottom: 1rem;
+      }
+
+      .home-text .subtitle-wrapper {
+        font-size: 1.5rem;
+        color: var(--first-color);
+        font-weight: 600;
+        height: 2rem;
+        overflow: hidden;
+        margin-bottom: 1.5rem;
+      }
+
+      .home-description {
+        font-size: 1rem;
+        line-height: 1.6;
+        margin-bottom: 2rem;
+        max-width: 450px;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        padding: 1rem 2rem;
+        background-color: var(--first-color);
+        color: #fff;
+        border-radius: 3rem;
+        font-weight: 500;
+        transition: 0.3s;
+        box-shadow: 0 10px 20px rgba(113, 58, 190, 0.2);
+        cursor: pointer;
+        border: none;
+      }
+
+      .btn:hover {
+        background-color: var(--first-color-alt);
+        transform: translateY(-5px);
+        box-shadow: 0 15px 25px rgba(113, 58, 190, 0.4);
+      }
+      
+      .btn i { margin-left: 0.5rem; transition: 0.3s; }
+      .btn:hover i { transform: translateX(5px); }
+
+      /* Hero Image & Blob */
+      .home-img-wrapper {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        perspective: 1000px; /* For 3D tilt */
+      }
+
+      .blob-bg {
+        position: absolute;
+        width: 500px; 
+        height: 500px; 
+        background: var(--first-color);
+        border-radius: 50%;
+        z-index: -1;
+        opacity: 0.3;
+        filter: blur(50px);
+        animation: glowPulse 4s ease-in-out infinite alternate;
+        transition: transform 0.1s ease-out; /* For parallax */
+      }
+
+      @keyframes glowPulse {
+        from { transform: scale(1); opacity: 0.3; }
+        to { transform: scale(1.1); opacity: 0.5; }
+      }
+
+      .hero-img-box {
+        width: 450px;
+        height: 450px;
+        border-radius: 50%;
+        /* iOS-style Acrylic / Glassmorphism */
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(25px) saturate(180%);
+        -webkit-backdrop-filter: blur(25px) saturate(180%);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        box-shadow: 
+            0 8px 32px 0 rgba(31, 38, 135, 0.1),
+            inset 0 0 20px rgba(255, 255, 255, 0.3);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        z-index: 2;
+        position: relative;
+      }
+      
+      body.dark-theme .hero-img-box {
+          background: rgba(20, 20, 20, 0.4);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          box-shadow: 
+            0 8px 32px 0 rgba(0, 0, 0, 0.3),
+            inset 0 0 20px rgba(255, 255, 255, 0.05);
+      }
+
+      .hero-img {
+        width: 90%; /* Slight padding inside frame */
+        height: 90%;
+        object-fit: cover;
+        border-radius: 50%;
+        transition: transform 0.3s ease-out;
+      }
+      
+      .hero-img-box:hover .hero-img {
+          transform: scale(1.05);
+      }
+
+      /* --- About & Skills Section --- */
+      .about-wrapper {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4rem;
+        max-width: 1100px;
+        width: 100%;
+        align-items: center;
+      }
+
+      .about-img-box img {
+        width: 350px;
+        border-radius: 20px;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        transform: rotate(-3deg);
+        transition: 0.3s;
+      }
+      .about-img-box img:hover { transform: rotate(0) scale(1.02); }
+
+      .section-heading {
+        font-size: 2.5rem;
+        color: var(--title-color);
+        margin-bottom: 0.5rem;
+        font-weight: 700;
+      }
+      .section-sub {
+        display: block;
+        color: var(--first-color);
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-bottom: 2rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+      }
+
+      .skills-grid {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-top: 2rem;
+      }
+
+      .skill-tag {
+        padding: 0.8rem 1.5rem;
+        background: var(--container-color);
+        border-radius: 10px;
+        font-weight: 600;
+        color: var(--title-color);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        cursor: default;
+        transition: 0.3s;
+      }
+
+      .skill-tag:hover {
+        background: var(--first-color);
+        color: #fff;
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(113, 58, 190, 0.3);
+      }
+
+      /* --- Qualifications (Timeline) --- */
+      .timeline-box {
+        background: var(--container-color);
+        padding: 2rem;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        max-width: 600px;
+      }
+      
+      .timeline-item {
+        display: flex;
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
+        align-items: flex-start;
+      }
+      .timeline-item:last-child { margin-bottom: 0; }
+
+      .time-dot {
+        width: 12px;
+        height: 12px;
+        background: var(--first-color);
+        border-radius: 50%;
+        margin-top: 6px;
+        position: relative;
+      }
+      .time-dot::after {
+        content: '';
+        position: absolute;
+        width: 2px;
+        height: 40px;
+        background: rgba(0,0,0,0.1);
+        top: 15px;
+        left: 5px;
+      }
+      .timeline-item:last-child .time-dot::after { display: none; }
+
+      .time-content h4 { font-size: 1.1rem; color: var(--title-color); }
+      .time-content span { font-size: 0.85rem; color: var(--first-color); font-weight: 500; }
+      .time-content p { font-size: 0.9rem; color: var(--text-color-light); margin-top: 0.2rem; }
+
+      /* --- Portfolio (Carousel) --- */
+      .portfolio-wrapper {
+        width: 100%;
+        max-width: 1200px;
+      }
+
+      .swiper {
+        width: 100%;
+        padding: 50px 20px !important;
+        overflow: visible !important;
+      }
+
+      .project-card {
+        background: var(--container-color);
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        transition: 0.4s;
+        position: relative;
+        group: project;
+      }
+
+      .project-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+      }
+
+      .card-img-holder {
+        height: 200px;
+        width: 100%;
+        background: #f0f0f0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .card-img-holder img {
+        width: 80%;
+        transition: 0.4s;
+      }
+
+      .project-card:hover .card-img-holder img {
+        transform: scale(1.1);
+      }
+      
+      /* Dark Overlay on Hover */
+      .card-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(113, 58, 190, 0.9);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: 0.3s;
+      }
+      
+      .project-card:hover .card-overlay { opacity: 1; }
+
+      .overlay-btn {
+        color: #fff;
+        font-weight: 600;
+        border: 2px solid #fff;
+        padding: 0.5rem 1.5rem;
+        border-radius: 30px;
+        transform: translateY(20px);
+        transition: 0.4s;
+      }
+
+      .project-card:hover .overlay-btn { transform: translateY(0); }
+      .project-card:hover .overlay-btn:hover { background: #fff; color: var(--first-color); }
+
+      .card-body {
+        padding: 1.5rem;
+      }
+
+      .card-title { font-size: 1.25rem; font-weight: 600; color: var(--title-color); margin-bottom: 0.5rem; }
+      .card-desc { font-size: 0.9rem; color: var(--text-color); margin-bottom: 1rem; }
+
+      /* --- Contact Section --- */
+      .contact-wrapper {
+        text-align: center;
+        max-width: 700px;
+      }
+      
+      .contact-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(113, 58, 190, 0.05) 100%);
+        z-index: -1;
+      }
+
+      .contact-cards {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        margin-top: 3rem;
+        flex-wrap: wrap;
+      }
+
+      .contact-card {
+        background: var(--container-color);
+        padding: 2rem;
+        border-radius: 20px;
+        min-width: 200px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        transition: 0.3s;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        cursor: pointer;
+      }
+
+      .contact-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(113, 58, 190, 0.15);
+      }
+
+      .contact-card i {
+        font-size: 2.5rem;
+        color: var(--first-color);
+        margin-bottom: 1rem;
+        transition: 0.3s;
+      }
+
+      .contact-card:hover i { transform: scale(1.2); }
+
+      .contact-card h3 { font-size: 1.1rem; color: var(--title-color); margin-bottom: 0.2rem; }
+      .contact-card span { font-size: 0.85rem; color: var(--text-color-light); }
+      
+      /* --- Media Queries --- */
+      @media (max-width: 768px) {
+        .nav-list { display: none; } /* Hide regular nav, use mobile if implemented or just keep minimal */
+        .home-content, .about-wrapper { grid-template-columns: 1fr; text-align: center; gap: 2rem; }
+        .home-text h1 { font-size: 2.5rem; }
+        .home-img-wrapper { order: -1; }
+        .hero-img-box, .blob-bg { width: 280px; height: 280px; }
+        .section-slide { padding: 0 1.5rem; overflow-y: auto; display: block; padding-top: 5rem; } /* Allow scrolling inside slides on mobile if content overflows */
+        .side-nav { display: none; }
+        .project-card { margin-bottom: 2rem; }
+      }
+    </style>
+  </head>
+  <body>
+
+    <!-- Header / Navbar -->
+    <header class="header" id="header">
+      <nav class="nav">
+        <a href="#" class="nav-logo">Ismit.</a>
+        
+        <ul class="nav-list">
+          <li class="nav-item"><a onclick="goToSlide(0)" class="nav-link active-link">Home</a></li>
+          <li class="nav-item"><a onclick="goToSlide(1)" class="nav-link">About</a></li>
+          <li class="nav-item"><a onclick="goToSlide(2)" class="nav-link">Work</a></li>
+          <li class="nav-item"><a onclick="goToSlide(3)" class="nav-link">Portfolio</a></li>
+          <li class="nav-item"><a onclick="goToSlide(4)" class="nav-link">Contact</a></li>
+        </ul>
+
+        <!-- Theme Toggle -->
+        <i class="fa-regular fa-moon change-theme" id="theme-button" style="font-size: 1.2rem; cursor: pointer; color: var(--title-color);"></i>
+      </nav>
+    </header>
+
+    <!-- Side Indicators -->
+    <div class="side-nav">
+      <div class="dot active" onclick="goToSlide(0)"></div>
+      <div class="dot" onclick="goToSlide(1)"></div>
+      <div class="dot" onclick="goToSlide(2)"></div>
+      <div class="dot" onclick="goToSlide(3)"></div>
+      <div class="dot" onclick="goToSlide(4)"></div>
+    </div>
+
+    <!-- Main Slides Container -->
+    <div class="main-wrapper">
+      
+      <!-- SLIDE 1: HOME -->
+      <section class="section-slide active" id="home">
+        <div class="home-content">
+          <div class="home-text">
+            <h1 class="animate-item delay-100">Hi, I am <br>Ismit Tripathy</h1>
+            <div class="subtitle-wrapper animate-item delay-200">
+              <span id="typing-text"></span>
+            </div>
+            <p class="home-description animate-item delay-300">
+              Blending creativity with technology. I design and build digital experiences that are minimal, functional, and visually striking.
+            </p>
+            <a onclick="goToSlide(4)" class="btn animate-item delay-400">
+              Contact Me <i class="fa-regular fa-paper-plane"></i>
+            </a>
+          </div>
+
+          <div class="home-img-wrapper animate-item delay-500" id="hero-tilt">
+            <div class="blob-bg"></div>
+            <!-- Added Circular Glass Frame -->
+            <div class="hero-img-box">
+              <img src="Assets/Icons/logo1.png" alt="Profile" class="hero-img">
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 2: ABOUT -->
+      <section class="section-slide" id="about">
+        <div class="about-wrapper">
+          <div class="about-img-box animate-item delay-100">
+             <img src="Assets/Icons/aboutimg.png" alt="About">
+          </div>
+          
+          <div class="about-text">
+            <span class="section-sub animate-item delay-200">Who I Am</span>
+            <h2 class="section-heading animate-item delay-300">About Me</h2>
+            <p class="home-description animate-item delay-400" id="bio-text">
+              I’m an Electronics & Communication Engineering student with a passion for software. Currently mastering DSA in Java and exploring the intersection of hardware and code.
+              <br><br>
+              I love building things—whether it's a website, a video edit, or an electronic circuit.
+            </p>
+            
+            <div class="skills-grid animate-item delay-500">
+              <div class="skill-tag">Java</div>
+              <div class="skill-tag">Python</div>
+              <div class="skill-tag">Canva</div>
+              <div class="skill-tag">DaVinci Resolve</div>
+              <div class="skill-tag">HTML/CSS</div>
+              <div class="skill-tag">Shopify</div>
+            </div>
+
+            <div style="margin-top: 2rem;">
+                 <a href="Assets/Resume.pdf" download="" class="btn animate-item delay-500">
+                  Download Resume <i class="fa-solid fa-download"></i>
+                </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 3: WORK / QUALIFICATION -->
+      <section class="section-slide" id="work">
+        <div style="width: 100%; max-width: 1000px;">
+          <div style="text-align: center; margin-bottom: 3rem;">
+            <span class="section-sub animate-item delay-100">My Journey</span>
+            <h2 class="section-heading animate-item delay-200">Qualifications & Experience</h2>
+          </div>
+
+          <div style="display: flex; gap: 4rem; justify-content: center; flex-wrap: wrap;">
+            
+            <!-- Education Column -->
+            <div class="timeline-box animate-item delay-300">
+               <h3 style="margin-bottom: 1.5rem; color: var(--first-color);"><i class="fa-solid fa-graduation-cap"></i> Education</h3>
+               
+               <div class="timeline-item">
+                 <div class="time-dot"></div>
+                 <div class="time-content">
+                   <h4>B.Tech ECE</h4>
+                   <span>2022 - Present</span>
+                   <p>Current University</p>
+                 </div>
+               </div>
+               
+               <div class="timeline-item">
+                 <div class="time-dot"></div>
+                 <div class="time-content">
+                   <h4>Class 12th</h4>
+                   <span>2022</span>
+                   <p>DAV Pokhariput</p>
+                 </div>
+               </div>
+
+                <div class="timeline-item">
+                 <div class="time-dot"></div>
+                 <div class="time-content">
+                   <h4>Class 10th</h4>
+                   <span>2019</span>
+                   <p>Kendriya Vidyalaya</p>
+                 </div>
+               </div>
+            </div>
+
+            <!-- Experience Column -->
+            <div class="timeline-box animate-item delay-400">
+               <h3 style="margin-bottom: 1.5rem; color: var(--first-color);"><i class="fa-solid fa-briefcase"></i> Experience</h3>
+               
+               <div class="timeline-item">
+                 <div class="time-dot"></div>
+                 <div class="time-content">
+                   <h4>Graphic Designer</h4>
+                   <span>Co-Lead, Design Team</span>
+                   <p>Entrepreneurship Club</p>
+                 </div>
+               </div>
+               
+               <div class="timeline-item">
+                 <div class="time-dot"></div>
+                 <div class="time-content">
+                   <h4>Web Development</h4>
+                   <span>Projects</span>
+                   <p>Shopify & Freelance</p>
+                 </div>
+               </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 4: PORTFOLIO -->
+      <section class="section-slide" id="portfolio">
+        <div class="portfolio-wrapper">
+           <div style="text-align: center; margin-bottom: 1rem;">
+            <span class="section-sub animate-item delay-100">Recent Works</span>
+            <h2 class="section-heading animate-item delay-200">Portfolio</h2>
+          </div>
+
+          <!-- Swiper -->
+          <div class="swiper mySwiper animate-item delay-300">
+            <div class="swiper-wrapper">
+              
+              <!-- Project 1 -->
+              <div class="swiper-slide">
+                <div class="project-card">
+                  <div class="card-img-holder">
+                    <img src="Assets/project1.svg" alt="Project 1">
+                    <div class="card-overlay">
+                      <a href="#" class="overlay-btn">View Project</a>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <h3 class="card-title">Pot Irrigation</h3>
+                    <p class="card-desc">Innovative irrigation system securing 2nd place at Cluster level.</p>
+                  </div>
+                </div>
+              </div>
+
+               <!-- Project 2 -->
+              <div class="swiper-slide">
+                <div class="project-card">
+                  <div class="card-img-holder">
+                    <img src="Assets/project2.svg" alt="Project 2">
+                    <div class="card-overlay">
+                      <a href="#" class="overlay-btn">View Project</a>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <h3 class="card-title">Shopify Store</h3>
+                    <p class="card-desc">Full-featured dropshipping e-commerce website.</p>
+                  </div>
+                </div>
+              </div>
+
+               <!-- Project 3 -->
+              <div class="swiper-slide">
+                <div class="project-card">
+                  <div class="card-img-holder">
+                    <img src="E:\CODDING\portfolio\portfolio\Assets\Icons\Screenshot 2025-12-22 140835.png" alt="Highball Harvest Estate">
+                    <div class="card-overlay">
+                      <a href="https://ismit-06.github.io/Highball-Harvest-Estate-Website/" target="_blank" class="overlay-btn">View Project</a>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <h3 class="card-title">Highball Harvest Estate</h3>
+                    <p class="card-desc">Responsive real estate website with modern design.</p>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <div class="swiper-pagination"></div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- SLIDE 5: CONTACT -->
+      <section class="section-slide" id="contact">
+        <div class="contact-bg"></div>
+        <div class="contact-wrapper">
+          <span class="section-sub animate-item delay-100">Get in Touch</span>
+          <h2 class="section-heading animate-item delay-200" style="font-size: 3rem;">Let's Work Together</h2>
+          <p class="home-description animate-item delay-300" style="margin: 0 auto 3rem auto;">
+            Have a project in mind or just want to say hi? I'm always open to discussing new projects and opportunities.
+          </p>
+
+          <div class="contact-cards animate-item delay-400">
+             <a href="mailto:ismittripathyit@gmail.com" class="contact-card">
+               <i class="fa-regular fa-envelope"></i>
+               <h3>Email Me</h3>
+               <span>ismittripathyit@gmail.com</span>
+             </a>
+             
+             <a href="https://www.linkedin.com/in/ismit06" target="_blank" class="contact-card">
+               <i class="fa-brands fa-linkedin-in"></i>
+               <h3>LinkedIn</h3>
+               <span>Connect with me</span>
+             </a>
+
+              <a href="https://github.com/Ismit-06" target="_blank" class="contact-card">
+               <i class="fa-brands fa-github"></i>
+               <h3>GitHub</h3>
+               <span>Check my code</span>
+             </a>
+
+             <a href="https://www.instagram.com/ismit_06/" target="_blank" class="contact-card">
+               <i class="fa-brands fa-instagram"></i>
+               <h3>Instagram</h3>
+               <span>@ismit_06</span>
+             </a>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <script>
+      /* --- SLIDER LOGIC --- */
+      const slides = document.querySelectorAll('.section-slide');
+      const dots = document.querySelectorAll('.dot');
+      const navLinks = document.querySelectorAll('.nav-link');
+      let currentSlide = 0;
+      let isAnimating = false;
+      const totalSlides = slides.length;
+
+      function goToSlide(index) {
+        if (isAnimating || index === currentSlide) return;
+        if (index < 0 || index >= totalSlides) return;
+        
+        isAnimating = true;
+
+        // Remove active class from current
+        slides[currentSlide].classList.remove('active');
+        dots[currentSlide].classList.remove('active');
+        if(navLinks[currentSlide]) navLinks[currentSlide].classList.remove('active-link');
+
+        // Update index
+        currentSlide = index;
+
+        // Add active class to new
+        slides[currentSlide].classList.add('active');
+        dots[currentSlide].classList.add('active');
+        if(navLinks[currentSlide]) navLinks[currentSlide].classList.add('active-link');
+
+        // Animation cooldown
+        setTimeout(() => {
+          isAnimating = false;
+        }, 800);
+      }
+
+      /* --- EVENT LISTENERS --- */
+      // Mouse Wheel
+      window.addEventListener('wheel', (e) => {
+        if(e.deltaY > 0) {
+          goToSlide(currentSlide + 1);
+        } else {
+          goToSlide(currentSlide - 1);
+        }
+      });
+
+      // Keyboard
+      window.addEventListener('keydown', (e) => {
+        if(e.key === 'ArrowDown') goToSlide(currentSlide + 1);
+        if(e.key === 'ArrowUp') goToSlide(currentSlide - 1);
+      });
+
+      // Touch Swipe
+      let touchStartY = 0;
+      window.addEventListener('touchstart', e => touchStartY = e.changedTouches[0].screenY);
+      window.addEventListener('touchend', e => {
+        const touchEndY = e.changedTouches[0].screenY;
+        if(touchStartY - touchEndY > 50) goToSlide(currentSlide + 1); // Swipe Up
+        if(touchEndY - touchStartY > 50) goToSlide(currentSlide - 1); // Swipe Down
+      });
+
+
+      /* --- TYPING EFFECT --- */
+      const words = ["B.Tech Student", "Aspiring Engineer", "Frontend Developer", "Graphic Designer"];
+      let wordIndex = 0;
+      let charIndex = 0;
+      let isDeleting = false;
+      const typeSpeed = 100;
+      const deleteSpeed = 50;
+      const pauseTime = 2000;
+      const typingText = document.getElementById('typing-text');
+
+      function type() {
+        const currentWord = words[wordIndex];
+        
+        if (isDeleting) {
+          typingText.textContent = currentWord.substring(0, charIndex - 1);
+          charIndex--;
+        } else {
+          typingText.textContent = currentWord.substring(0, charIndex + 1);
+          charIndex++;
+        }
+
+        let typeDelay = isDeleting ? deleteSpeed : typeSpeed;
+
+        if (!isDeleting && charIndex === currentWord.length) {
+          typeDelay = pauseTime;
+          isDeleting = true;
+        } else if (isDeleting && charIndex === 0) {
+          isDeleting = false;
+          wordIndex = (wordIndex + 1) % words.length;
+        }
+
+        setTimeout(type, typeDelay);
+      }
+      document.addEventListener('DOMContentLoaded', type);
+
+
+      /* --- PARALLAX EFFECT --- */
+      document.addEventListener('mousemove', (e) => {
+        if(window.innerWidth > 768) {
+          const x = (window.innerWidth - e.pageX * 2) / 50;
+          const y = (window.innerHeight - e.pageY * 2) / 50;
+          
+          const heroImg = document.querySelector('#hero-tilt');
+          if(heroImg) {
+            heroImg.style.transform = `translateX(${x}px) translateY(${y}px)`;
+          }
+        }
+      });
+
+      /* --- NAVBAR AUTO-HIDE --- */
+      let navTimeout;
+      const header = document.getElementById('header');
+      window.addEventListener('mousemove', () => {
+        header.style.transform = "translateY(0)";
+        header.style.opacity = "1";
+        clearTimeout(navTimeout);
+        navTimeout = setTimeout(() => {
+          if(window.scrollY < 50) { // Only hide if at top logic if it was scrolling, but here fixed
+             // Actually for slides we might want it always visible or hide on idle
+             header.style.transform = "translateY(-100%)";
+             header.style.opacity = "0";
+          }
+        }, 3000);
+      });
+
+
+      /* --- SWIPER INIT --- */
+      var swiper = new Swiper(".mySwiper", {
+        slidesPerView: 1,
+        spaceBetween: 30,
+        breakpoints: {
+          768: {
+            slidesPerView: 3,
+            spaceBetween: 30,
+          },
+        },
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
+        },
+      });
+
+      /* --- THEME TOGGLE --- */
+      const themeButton = document.getElementById("theme-button");
+      const darkTheme = "dark-theme";
+      const iconTheme = "fa-sun";
+
+      // Previously selected topic (if user selected)
+      const selectedTheme = localStorage.getItem("selected-theme");
+      const selectedIcon = localStorage.getItem("selected-icon");
+
+      const getCurrentTheme = () => document.body.classList.contains(darkTheme) ? "dark" : "light";
+      const getCurrentIcon = () => themeButton.classList.contains(iconTheme) ? "fa-moon" : "fa-sun";
+
+      if (selectedTheme) {
+        document.body.classList[selectedTheme === "dark" ? "add" : "remove"](darkTheme);
+        themeButton.classList[selectedIcon === "fa-moon" ? "add" : "remove"](iconTheme);
+      }
+
+      themeButton.addEventListener("click", () => {
+        document.body.classList.toggle(darkTheme);
+        themeButton.classList.toggle(iconTheme);
+        themeButton.classList.toggle('fa-moon');
+        
+        localStorage.setItem("selected-theme", getCurrentTheme());
+        localStorage.setItem("selected-icon", getCurrentIcon());
+      });
+
+    </script>
+  </body>
+</html>
