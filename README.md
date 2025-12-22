@@ -4,7 +4,7 @@ Welcome to my personal portfolio website! This project is a modern, interactive 
 
 It moves away from traditional scrolling websites, offering a unique fullscreen slide-based experience that feels more like a native app than a webpage.
 
-🔗 Live Demo: View My Portfolio
+🔗 Live Demo: [View My Portfolio](https://ismit-06.github.io/My-Portfolio/)
 
 ✨ Key Features
 
