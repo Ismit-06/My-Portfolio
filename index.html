@@ -939,9 +939,8 @@
         /* 1. Global Slide Fixes for Mobile */
         .section-slide {
           /* Reduce padding so content has more space to breathe and fit in one screen */
-          /* FIX: Increase top padding (100px) so content starts below header */
-          /* FIX: Adjust bottom padding so it clears bottom nav but doesn't leave huge gap */
-          padding: 100px 1.5rem 80px 1.5rem; 
+          /* FIX: Increase top padding (120px) to clear header completely */
+          padding: 120px 1.5rem 100px 1.5rem; 
           display: flex; /* Use Flexbox to align vertically */
           flex-direction: column;
           justify-content: center; /* Center content vertically */
@@ -1012,12 +1011,13 @@
           /* Allow it to fill available space but not force scroll */
           flex: 1; 
           justify-content: center;
+          min-height: calc(100vh - 140px); /* Fill space minus header/footer */
         }
         
         .hero-img-box {
-          /* Make image smaller to fit nicely */
-          width: 180px; 
-          height: 180px;
+          /* Make image a bit bigger per request: 240px */
+          width: 240px; 
+          height: 240px;
           margin: 0 auto;
         }
         
@@ -1045,6 +1045,7 @@
           margin-bottom: 0; /* Remove bottom margin to reduce gap */
           justify-content: center; /* Try to center vertically if flex parent allows */
           flex: 1; /* Fill space */
+          min-height: calc(100vh - 140px);
         }
         
         .about-img-container {
@@ -1064,8 +1065,10 @@
         }
         
         .section-heading {
-            font-size: 1.6rem; /* Smaller heading */
-            margin-bottom: 0.2rem;
+            font-size: 1.8rem; /* Clear size */
+            line-height: 1.2;
+            word-wrap: break-word; /* Prevent overflow */
+            margin-bottom: 0.5rem;
         }
         
         .about-description {
@@ -1114,6 +1117,11 @@
             padding: 1.5rem; /* Less padding */
         }
         
+        /* Specific overrides for Work/Qualification section spacing */
+        #work > div > div:first-child {
+            margin-bottom: 1.5rem !important; /* Override inline 3rem */
+        }
+        
         .timeline-item {
             gap: 1rem;
             margin-bottom: 1.2rem;
@@ -1129,6 +1137,7 @@
             flex-direction: column;
             justify-content: center;
             height: 100%;
+            min-height: calc(100vh - 140px);
         }
 
         /* 7. Contact Fixes */
